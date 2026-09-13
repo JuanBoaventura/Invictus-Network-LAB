@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invictus Network Lab</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <div class="app-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-icon">IN</div>
+
+        <div class="logo-text">
+          <strong>INVICTUS</strong>
+          <span>NETWORK LAB</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <p class="nav-section-title">Principal</p>
+
+        <button class="nav-link active" data-section="dashboard">
+          <span>▦</span>
+          <span>Dashboard</span>
+        </button>
+
+        <button class="nav-link" data-section="devices">
+          <span>▣</span>
+          <span>Dispositivos</span>
+        </button>
+
+        <button class="nav-link" data-section="diagnostic">
+          <span>⌕</span>
+          <span>Diagnóstico IP</span>
+        </button>
+
+        <button class="nav-link" data-section="subnets">
+          <span>⌘</span>
+          <span>Sub-redes</span>
+        </button>
+
+        <p class="nav-section-title">Ferramentas</p>
+
+        <button class="nav-link" data-section="commands">
+          <span>›_</span>
+          <span>Comandos</span>
+        </button>
+
+        <button class="nav-link" data-section="alerts">
+          <span>!</span>
+          <span>Alertas</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-status">
+          <span class="status-dot"></span>
+          <span>Monitoramento ativo</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div class="main-wrapper">
+
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-button" id="mobileMenuButton">
+            ☰
+          </button>
+
+          <div>
+            <h1 class="page-heading" id="pageHeading">
+              Dashboard
+            </h1>
+
+            <p class="page-description" id="pageDescription">
+              Visão geral do laboratório de redes.
+            </p>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <button class="topbar-button" id="themeToggle">
+            ☀️ Tema
+          </button>
+
+          <button class="btn btn-primary" id="topbarHealthCheck">
+            Verificar rede
+          </button>
+        </div>
+      </header>
+
+      <main class="main-content">
+
+        <!-- DASHBOARD -->
+        <section class="page-section" id="section-dashboard">
+
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Dashboard</h2>
+              <p class="section-description">
+                Acompanhe o estado atual do seu laboratório de redes.
+              </p>
+            </div>
+
+            <button class="btn btn-primary" id="runHealthCheck">
+              Executar verificação
+            </button>
+          </div>
+
+          <div class="card-grid">
+            <article class="card">
+              <div class="card-header">
+                <span class="card-title">Dispositivos</span>
+                <div class="card-icon">▣</div>
+              </div>
+
+              <div class="card-value" id="totalDevices">0</div>
+              <div class="card-label">Dispositivos cadastrados</div>
+            </article>
+
+            <article class="card">
+              <div class="card-header">
+                <span class="card-title">Online</span>
+                <div class="card-icon">✓</div>
+              </div>
+
+              <div class="card-value" id="onlineDevices">0</div>
+              <div class="card-label">Dispositivos disponíveis</div>
+            </article>
+
+            <article class="card">
+              <div class="card-header">
+                <span class="card-title">Alertas</span>
+                <div class="card-icon">!</div>
+              </div>
+
+              <div class="card-value" id="totalAlerts">0</div>
+              <div class="card-label">Alertas registrados</div>
+            </article>
+
+            <article class="card">
+              <div class="card-header">
+                <span class="card-title">Disponibilidade</span>
+                <div class="card-icon">◉</div>
+              </div>
+
+              <div class="card-value" id="availability">100%</div>
+              <div class="card-label">Disponibilidade simulada</div>
+            </article>
+          </div>
+
+          <div class="content-grid">
+            <article class="card">
+              <div class="card-header">
+                <h3 class="card-title">Status do laboratório</h3>
+              </div>
+
+              <div class="status-panel">
+                <span class="status-dot"></span>
+                <strong id="networkStatus">Sistema operacional</strong>
+              </div>
+
+              <p class="card-label">
+                Ambiente local para estudos de redes, endereçamento IPv4 e diagnóstico.
+              </p>
+            </article>
+
+            <article class="card">
+              <div class="card-header">
+                <h3 class="card-title">Última verificação</h3>
+              </div>
+
+              <strong id="lastCheck">Ainda não executada</strong>
+
+              <p class="card-label">
+                Execute uma verificação para atualizar o status da rede.
+              </p>
+            </article>
+          </div>
+
+          <article class="card">
+            <div class="card-header">
+              <h3 class="card-title">Atividade recente</h3>
+            </div>
+
+            <div id="activityList" class="activity-list">
+              <p class="table-empty">Nenhuma atividade registrada.</p>
+            </div>
+          </article>
+        </section>
+
+        <!-- DISPOSITIVOS -->
+        <section class="page-section" id="section-devices" hidden>
+
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Dispositivos</h2>
+              <p class="section-description">
+                Cadastre e gerencie os dispositivos do laboratório.
+              </p>
+            </div>
+
+            <button class="btn btn-primary" id="newDeviceButton">
+              + Novo dispositivo
+            </button>
+          </div>
+
+          <article class="card" id="deviceFormCard" hidden>
+            <div class="card-header">
+              <h3 class="card-title">Cadastrar dispositivo</h3>
+            </div>
+
+            <form id="deviceForm">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="deviceName">
+                    Nome do dispositivo
+                  </label>
+
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="deviceName"
+                    placeholder="Ex.: Servidor Windows"
+                    required
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="deviceType">
+                    Tipo
+                  </label>
+
+                  <select class="form-control" id="deviceType" required>
+                    <option value="">Selecione</option>
+                    <option value="Servidor">Servidor</option>
+                    <option value="Computador">Computador</option>
+                    <option value="Roteador">Roteador</option>
+                    <option value="Switch">Switch</option>
+                    <option value="Impressora">Impressora</option>
+                    <option value="Outro">Outro</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="deviceIp">
+                    Endereço IPv4
+                  </label>
+
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="deviceIp"
+                    placeholder="Ex.: 192.168.1.10"
+                    required
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="deviceStatus">
+                    Status
+                  </label>
+
+                  <select class="form-control" id="deviceStatus" required>
+                    <option value="Online">Online</option>
+                    <option value="Offline">Offline</option>
+                    <option value="Manutenção">Manutenção</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn" id="cancelDeviceButton">
+                  Cancelar
+                </button>
+
+                <button type="submit" class="btn btn-primary">
+                  Salvar dispositivo
+                </button>
+              </div>
+            </form>
+          </article>
+
+          <article class="card">
+            <div class="card-header">
+              <h3 class="card-title">Lista de dispositivos</h3>
+
+              <div class="table-filters">
+                <select class="form-control" id="deviceStatusFilter">
+                  <option value="Todos">Todos os status</option>
+                  <option value="Online">Online</option>
+                  <option value="Offline">Offline</option>
+                  <option value="Manutenção">Manutenção</option>
+                </select>
+
+                <select class="form-control" id="deviceTypeFilter">
+                  <option value="Todos">Todos os tipos</option>
+                  <option value="Servidor">Servidor</option>
+                  <option value="Computador">Computador</option>
+                  <option value="Roteador">Roteador</option>
+                  <option value="Switch">Switch</option>
+                  <option value="Impressora">Impressora</option>
+                  <option value="Outro">Outro</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Tipo</th>
+                    <th>IPv4</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+
+                <tbody id="devicesTableBody">
+                  <tr>
+                    <td colspan="5" class="table-empty">
+                      Nenhum dispositivo cadastrado.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <!-- DIAGNÓSTICO -->
+        <section class="page-section" id="section-diagnostic" hidden>
+
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Diagnóstico IPv4</h2>
+              <p class="section-description">
+                Informe um endereço IP e uma máscara para calcular os dados da rede.
+              </p>
+            </div>
+          </div>
+
+          <article class="card">
+            <form id="diagnosticForm">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="ipInput">
+                    Endereço IPv4
+                  </label>
+
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="ipInput"
+                    placeholder="Ex.: 192.168.1.25"
+                    required
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="maskInput">
+                    Máscara de sub-rede
+                  </label>
+
+                  <select class="form-control" id="maskInput" required>
+                    <option value="255.255.255.0">255.255.255.0 /24</option>
+                    <option value="255.255.255.128">255.255.255.128 /25</option>
+                    <option value="255.255.255.192">255.255.255.192 /26</option>
+                    <option value="255.255.255.224">255.255.255.224 /27</option>
+                    <option value="255.255.255.240">255.255.255.240 /28</option>
+                    <option value="255.255.255.248">255.255.255.248 /29</option>
+                    <option value="255.255.255.252">255.255.255.252 /30</option>
+                    <option value="255.255.0.0">255.255.0.0 /16</option>
+                    <option value="255.0.0.0">255.0.0.0 /8</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button class="btn btn-primary" type="submit">
+                  Calcular rede
+                </button>
+              </div>
+            </form>
+
+            <div class="result-box" id="diagnosticResult" hidden>
+              <h3 class="result-title">Resultado do diagnóstico</h3>
+
+              <div class="result-grid">
+                <div class="result-item">
+                  <span class="result-label">IP informado</span>
+                  <strong class="result-value" id="resultIp">—</strong>
+                </div>
+
+                <div class="result-item">
+                  <span class="result-label">Máscara</span>
+                  <strong class="result-value" id="resultMask">—</strong>
+                </div>
+
+                <div class="result-item">
+                  <span class="result-label">Endereço de rede</span>
+                  <strong class="result-value" id="resultNetwork">—</strong>
+                </div>
+
+                <div class="result-item">
+                  <span class="result-label">Broadcast</span>
+                  <strong class="result-value" id="resultBroadcast">—</strong>
+                </div>
+
+                <div class="result-item">
+                  <span class="result-label">Primeiro host</span>
+                  <strong class="result-value" id="resultFirstHost">—</strong>
+                </div>
+
+                <div class="result-item">
+                  <span class="result-label">Último host</span>
+                  <strong class="result-value" id="resultLastHost">—</strong>
+                </div>
+
+                <div class="result-item">
+                  <span class="result-label">Hosts disponíveis</span>
+                  <strong class="result-value" id="resultHostCount">—</strong>
+                </div>
+
+                <div class="result-item">
+                  <span class="result-label">Classe aproximada</span>
+                  <strong class="result-value" id="resultClass">—</strong>
+                </div>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <!-- SUB-REDES -->
+        <section class="page-section" id="section-subnets" hidden>
+
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Calculadora de sub-redes</h2>
+              <p class="section-description">
+                Divida uma rede IPv4 em sub-redes menores.
+              </p>
+            </div>
+          </div>
+
+          <article class="card">
+            <form id="subnetForm">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label" for="subnetNetwork">
+                    Rede base
+                  </label>
+
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="subnetNetwork"
+                    placeholder="Ex.: 192.168.1.0"
+                    required
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="subnetPrefix">
+                    Prefixo original
+                  </label>
+
+                  <select class="form-control" id="subnetPrefix">
+                    <option value="24">/24</option>
+                    <option value="16">/16</option>
+                    <option value="8">/8</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="newPrefix">
+                    Novo prefixo
+                  </label>
+
+                  <select class="form-control" id="newPrefix">
+                    <option value="25">/25</option>
+                    <option value="26">/26</option>
+                    <option value="27">/27</option>
+                    <option value="28">/28</option>
+                    <option value="29">/29</option>
+                    <option value="30">/30</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button class="btn btn-primary" type="submit">
+                  Gerar sub-redes
+                </button>
+              </div>
+            </form>
+
+            <div class="result-box" id="subnetResult" hidden>
+              <h3 class="result-title">Sub-redes geradas</h3>
+              <div id="subnetOutput"></div>
+            </div>
+          </article>
+        </section>
+
+        <!-- COMANDOS -->
+        <section class="page-section" id="section-commands" hidden>
+
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Comandos de rede</h2>
+              <p class="section-description">
+                Consulte comandos comuns utilizados no suporte técnico.
+              </p>
+            </div>
+          </div>
+
+          <div class="command-grid">
+            <article class="card command-card">
+              <h3 class="card-title">Windows</h3>
+
+              <code>ipconfig /all</code>
+              <p>Exibe as configurações completas de rede.</p>
+
+              <code>ping 8.8.8.8</code>
+              <p>Testa a comunicação com um endereço IP.</p>
+
+              <code>tracert google.com</code>
+              <p>Mostra o caminho até um destino.</p>
+
+              <code>nslookup google.com</code>
+              <p>Consulta informações de DNS.</p>
+            </article>
+
+            <article class="card command-card">
+              <h3 class="card-title">Linux</h3>
+
+              <code>ip addr</code>
+              <p>Exibe interfaces e endereços IP.</p>
+
+              <code>ip route</code>
+              <p>Mostra a tabela de roteamento.</p>
+
+              <code>ping -c 4 8.8.8.8</code>
+              <p>Executa quatro testes de conectividade.</p>
+
+              <code>ss -tuln</code>
+              <p>Lista portas e conexões em escuta.</p>
+            </article>
+          </div>
+        </section>
+
+        <!-- ALERTAS -->
+        <section class="page-section" id="section-alerts" hidden>
+
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Alertas</h2>
+              <p class="section-description">
+                Histórico de alertas gerados pelo laboratório.
+              </p>
+            </div>
+
+            <button class="btn btn-danger" id="clearAlertsButton">
+              Limpar alertas
+            </button>
+          </div>
+
+          <article class="card">
+            <div id="alertsList">
+              <p class="table-empty">Nenhum alerta registrado.</p>
+            </div>
+          </article>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
